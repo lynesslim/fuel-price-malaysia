@@ -122,7 +122,7 @@ add_action( 'plugins_loaded', 'fuel_price_init' );
 function fuel_price_add_action_links( $links ) {
 	$settings_link = sprintf(
 		'<a href="%s">%s</a>',
-		esc_url( admin_url( 'options-general.php?page=' . Fuel_Price_Admin::MENU_SLUG ) ),
+		esc_url( admin_url( 'admin.php?page=' . Fuel_Price_Admin::MENU_SLUG ) ),
 		esc_html__( 'Settings', 'fuel-price' )
 	);
 	array_unshift( $links, $settings_link );

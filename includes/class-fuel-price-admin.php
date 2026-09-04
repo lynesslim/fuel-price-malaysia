@@ -32,15 +32,17 @@ class Fuel_Price_Admin {
 	}
 
 	/**
-	 * Register menu under Settings
+	 * Register top-level admin menu (outside of Settings submenu)
 	 */
 	public static function add_admin_menu() {
-		add_options_page(
-			__( 'Fuel Price Malaysia Settings', 'fuel-price' ),
+		add_menu_page(
 			__( 'Fuel Price Malaysia', 'fuel-price' ),
+			__( 'Fuel Price', 'fuel-price' ),
 			'manage_options',
 			self::MENU_SLUG,
-			array( __CLASS__, 'render_settings_page' )
+			array( __CLASS__, 'render_settings_page' ),
+			'dashicons-performance',
+			30
 		);
 	}
 
@@ -50,7 +52,7 @@ class Fuel_Price_Admin {
 	 * @param string $hook Current admin page hook.
 	 */
 	public static function enqueue_assets( $hook ) {
-		if ( 'settings_page_' . self::MENU_SLUG !== $hook ) {
+		if ( false === strpos( $hook, self::MENU_SLUG ) ) {
 			return;
 		}
 
@@ -138,10 +140,23 @@ class Fuel_Price_Admin {
 
 		Fuel_Price_Cron::save_settings( $settings );
 
+		// Recalculate stored B7 price immediately with new offset so changes reflect right away
+		$data = Fuel_Price_API::get_stored_data();
+		if ( ! empty( $data ) ) {
+			if ( isset( $data['diesel'] ) && is_numeric( $data['diesel'] ) ) {
+				$data['diesel_b7'] = round( (float) $data['diesel'] + $settings['b7_premium'], 2 );
+			}
+			if ( isset( $data['diesel_eastmsia'] ) && is_numeric( $data['diesel_eastmsia'] ) ) {
+				$data['diesel_b7_eastmsia'] = round( (float) $data['diesel_eastmsia'] + $settings['b7_premium'], 2 );
+			}
+			$data['b7_premium_offset'] = $settings['b7_premium'];
+			update_option( Fuel_Price_API::OPTION_DATA_KEY, $data );
+		}
+
 		add_settings_error(
 			'fuel_price_messages',
 			'fuel_price_saved',
-			__( 'Settings saved and cron schedule updated successfully.', 'fuel-price' ),
+			__( 'Settings saved and prices updated successfully.', 'fuel-price' ),
 			'success'
 		);
 	}

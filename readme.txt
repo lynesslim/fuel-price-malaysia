@@ -28,7 +28,7 @@ Automated weekly synchronization of official Malaysian retail fuel prices (RON95
 
 1. Upload the plugin folder `Fuel Price` to the `/wp-content/plugins/` directory (or zip and upload via **Plugins > Add New > Upload Plugin**).
 2. Activate the plugin through the **Plugins** menu in WordPress.
-3. Navigate to **Settings > Fuel Price Malaysia** to review your schedule or click **Sync Prices Now** to fetch the latest data immediately.
+3. Navigate to **Fuel Price** in the WordPress admin sidebar to review your schedule, adjust the Euro 5 B7 offset, or click **Sync Prices Now** to fetch the latest data immediately.
 
 == Shortcode Usage ==
 
