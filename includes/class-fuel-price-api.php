@@ -110,26 +110,45 @@ class Fuel_Price_API {
 			);
 		}
 
+		// Euro 5 B7 is officially priced at +20 sen (+RM 0.20) higher than Euro 5 B10 diesel
+		$settings   = get_option( 'fuel_price_settings', array() );
+		$b7_premium = isset( $settings['b7_premium'] ) && is_numeric( $settings['b7_premium'] ) ? (float) $settings['b7_premium'] : 0.20;
+		$b7_premium = apply_filters( 'fuel_price_b7_premium_offset', $b7_premium );
+
+		$diesel_val      = isset( $level_record['diesel'] ) && is_numeric( $level_record['diesel'] ) ? (float) $level_record['diesel'] : null;
+		$diesel_east_val = isset( $level_record['diesel_eastmsia'] ) && is_numeric( $level_record['diesel_eastmsia'] ) ? (float) $level_record['diesel_eastmsia'] : null;
+
+		$diesel_b7          = ( null !== $diesel_val ) ? round( $diesel_val + $b7_premium, 2 ) : null;
+		$diesel_b7_eastmsia = ( null !== $diesel_east_val ) ? round( $diesel_east_val + $b7_premium, 2 ) : null;
+
+		$diesel_change      = isset( $change_record['diesel'] ) && is_numeric( $change_record['diesel'] ) ? (float) $change_record['diesel'] : 0.0;
+		$diesel_east_change = isset( $change_record['diesel_eastmsia'] ) && is_numeric( $change_record['diesel_eastmsia'] ) ? (float) $change_record['diesel_eastmsia'] : 0.0;
+
 		$parsed_data = array(
-			'date'            => isset( $level_record['date'] ) ? sanitize_text_field( $level_record['date'] ) : '',
-			'ron95'           => isset( $level_record['ron95'] ) && is_numeric( $level_record['ron95'] ) ? (float) $level_record['ron95'] : null,
-			'ron97'           => isset( $level_record['ron97'] ) && is_numeric( $level_record['ron97'] ) ? (float) $level_record['ron97'] : null,
-			'diesel'          => isset( $level_record['diesel'] ) && is_numeric( $level_record['diesel'] ) ? (float) $level_record['diesel'] : null,
-			'diesel_eastmsia' => isset( $level_record['diesel_eastmsia'] ) && is_numeric( $level_record['diesel_eastmsia'] ) ? (float) $level_record['diesel_eastmsia'] : null,
-			'ron95_skps'      => isset( $level_record['ron95_skps'] ) && is_numeric( $level_record['ron95_skps'] ) ? (float) $level_record['ron95_skps'] : null,
-			'ron95_budi95'    => isset( $level_record['ron95_budi95'] ) && is_numeric( $level_record['ron95_budi95'] ) ? (float) $level_record['ron95_budi95'] : null,
-			'diesel_budi'     => isset( $level_record['diesel_budi'] ) && is_numeric( $level_record['diesel_budi'] ) ? (float) $level_record['diesel_budi'] : null,
-			'diesel_skds'     => isset( $level_record['diesel_skds'] ) && is_numeric( $level_record['diesel_skds'] ) ? (float) $level_record['diesel_skds'] : null,
-			'changes'         => array(
-				'date'            => isset( $change_record['date'] ) ? sanitize_text_field( $change_record['date'] ) : '',
-				'ron95'           => isset( $change_record['ron95'] ) && is_numeric( $change_record['ron95'] ) ? (float) $change_record['ron95'] : 0.0,
-				'ron97'           => isset( $change_record['ron97'] ) && is_numeric( $change_record['ron97'] ) ? (float) $change_record['ron97'] : 0.0,
-				'diesel'          => isset( $change_record['diesel'] ) && is_numeric( $change_record['diesel'] ) ? (float) $change_record['diesel'] : 0.0,
-				'diesel_eastmsia' => isset( $change_record['diesel_eastmsia'] ) && is_numeric( $change_record['diesel_eastmsia'] ) ? (float) $change_record['diesel_eastmsia'] : 0.0,
+			'date'               => isset( $level_record['date'] ) ? sanitize_text_field( $level_record['date'] ) : '',
+			'ron95'              => isset( $level_record['ron95'] ) && is_numeric( $level_record['ron95'] ) ? (float) $level_record['ron95'] : null,
+			'ron97'              => isset( $level_record['ron97'] ) && is_numeric( $level_record['ron97'] ) ? (float) $level_record['ron97'] : null,
+			'diesel'             => $diesel_val,
+			'diesel_eastmsia'    => $diesel_east_val,
+			'diesel_b7'          => $diesel_b7,
+			'diesel_b7_eastmsia' => $diesel_b7_eastmsia,
+			'b7_premium_offset'  => $b7_premium,
+			'ron95_skps'         => isset( $level_record['ron95_skps'] ) && is_numeric( $level_record['ron95_skps'] ) ? (float) $level_record['ron95_skps'] : null,
+			'ron95_budi95'       => isset( $level_record['ron95_budi95'] ) && is_numeric( $level_record['ron95_budi95'] ) ? (float) $level_record['ron95_budi95'] : null,
+			'diesel_budi'        => isset( $level_record['diesel_budi'] ) && is_numeric( $level_record['diesel_budi'] ) ? (float) $level_record['diesel_budi'] : null,
+			'diesel_skds'        => isset( $level_record['diesel_skds'] ) && is_numeric( $level_record['diesel_skds'] ) ? (float) $level_record['diesel_skds'] : null,
+			'changes'            => array(
+				'date'               => isset( $change_record['date'] ) ? sanitize_text_field( $change_record['date'] ) : '',
+				'ron95'              => isset( $change_record['ron95'] ) && is_numeric( $change_record['ron95'] ) ? (float) $change_record['ron95'] : 0.0,
+				'ron97'              => isset( $change_record['ron97'] ) && is_numeric( $change_record['ron97'] ) ? (float) $change_record['ron97'] : 0.0,
+				'diesel'             => $diesel_change,
+				'diesel_eastmsia'    => $diesel_east_change,
+				'diesel_b7'          => $diesel_change,
+				'diesel_b7_eastmsia' => $diesel_east_change,
 			),
-			'raw_level'       => $level_record,
-			'updated_at'      => current_time( 'mysql' ),
-			'timestamp'       => time(),
+			'raw_level'          => $level_record,
+			'updated_at'         => current_time( 'mysql' ),
+			'timestamp'          => time(),
 		);
 
 		update_option( self::OPTION_DATA_KEY, $parsed_data );

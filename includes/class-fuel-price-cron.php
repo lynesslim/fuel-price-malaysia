@@ -61,6 +61,7 @@ class Fuel_Price_Cron {
 			'frequency'   => 'weekly',
 			'day_of_week' => '3',     // 3 = Wednesday
 			'time'        => '17:00', // 5:00 PM (17:00)
+			'b7_premium'  => 0.20,    // +RM 0.20 premium for Euro 5 B7
 			'enabled'     => 1,
 		);
 
@@ -79,6 +80,7 @@ class Fuel_Price_Cron {
 			'frequency'   => in_array( $new_settings['frequency'], array( 'weekly', 'daily', 'twicedaily', 'hourly' ), true ) ? $new_settings['frequency'] : 'weekly',
 			'day_of_week' => (string) max( 0, min( 6, intval( $new_settings['day_of_week'] ) ) ),
 			'time'        => sanitize_text_field( $new_settings['time'] ),
+			'b7_premium'  => isset( $new_settings['b7_premium'] ) && is_numeric( $new_settings['b7_premium'] ) ? (float) $new_settings['b7_premium'] : 0.20,
 			'enabled'     => ! empty( $new_settings['enabled'] ) ? 1 : 0,
 		);
 

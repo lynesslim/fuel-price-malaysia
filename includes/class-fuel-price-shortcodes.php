@@ -29,6 +29,8 @@ class Fuel_Price_Shortcodes {
 		add_shortcode( 'fuel_ron97', array( __CLASS__, 'render_ron97' ) );
 		add_shortcode( 'fuel_diesel', array( __CLASS__, 'render_diesel' ) );
 		add_shortcode( 'fuel_diesel_east', array( __CLASS__, 'render_diesel_east' ) );
+		add_shortcode( 'fuel_diesel_b7', array( __CLASS__, 'render_diesel_b7' ) );
+		add_shortcode( 'fuel_diesel_b7_east', array( __CLASS__, 'render_diesel_b7_east' ) );
 		add_shortcode( 'fuel_price_date', array( __CLASS__, 'render_date' ) );
 
 		// Register pre-built responsive components
@@ -91,18 +93,38 @@ class Fuel_Price_Shortcodes {
 
 		// Normalize aliases
 		$aliases = array(
-			'diesel_peninsular'    => 'diesel',
-			'diesel_peninsula'     => 'diesel',
-			'diesel_east'          => 'diesel_eastmsia',
-			'diesel_sabah_sarawak' => 'diesel_eastmsia',
-			'effective_date'       => 'date',
-			'price_date'           => 'date',
+			'diesel_peninsular'      => 'diesel',
+			'diesel_peninsula'       => 'diesel',
+			'diesel_east'            => 'diesel_eastmsia',
+			'diesel_sabah_sarawak'   => 'diesel_eastmsia',
+			'diesel_euro5_b7'        => 'diesel_b7',
+			'diesel_b7_peninsular'   => 'diesel_b7',
+			'euro5_b7'               => 'diesel_b7',
+			'b7'                     => 'diesel_b7',
+			'diesel_b7_east'         => 'diesel_b7_eastmsia',
+			'diesel_euro5_b7_east'   => 'diesel_b7_eastmsia',
+			'euro5_b7_east'          => 'diesel_b7_eastmsia',
+			'b7_east'                => 'diesel_b7_eastmsia',
+			'effective_date'         => 'date',
+			'price_date'             => 'date',
 		);
 		if ( isset( $aliases[ $type ] ) ) {
 			$type = $aliases[ $type ];
 		}
 
 		$data = Fuel_Price_API::get_stored_data();
+
+		// Fallback calculation for Diesel B7 if not yet stored in cache
+		if ( 'diesel_b7' === $type && ( ! isset( $data['diesel_b7'] ) || null === $data['diesel_b7'] ) ) {
+			if ( isset( $data['diesel'] ) && is_numeric( $data['diesel'] ) ) {
+				$data['diesel_b7'] = round( (float) $data['diesel'] + 0.20, 2 );
+			}
+		}
+		if ( 'diesel_b7_eastmsia' === $type && ( ! isset( $data['diesel_b7_eastmsia'] ) || null === $data['diesel_b7_eastmsia'] ) ) {
+			if ( isset( $data['diesel_eastmsia'] ) && is_numeric( $data['diesel_eastmsia'] ) ) {
+				$data['diesel_b7_eastmsia'] = round( (float) $data['diesel_eastmsia'] + 0.20, 2 );
+			}
+		}
 
 		// Handle Date
 		if ( 'date' === $type ) {
@@ -125,6 +147,15 @@ class Fuel_Price_Shortcodes {
 			}
 
 			$changes = isset( $data['changes'] ) && is_array( $data['changes'] ) ? $data['changes'] : array();
+			
+			// Fallback for B7 changes (matches standard diesel change)
+			if ( 'diesel_b7' === $fuel_key && ! isset( $changes['diesel_b7'] ) && isset( $changes['diesel'] ) ) {
+				$changes['diesel_b7'] = $changes['diesel'];
+			}
+			if ( 'diesel_b7_eastmsia' === $fuel_key && ! isset( $changes['diesel_b7_eastmsia'] ) && isset( $changes['diesel_eastmsia'] ) ) {
+				$changes['diesel_b7_eastmsia'] = $changes['diesel_eastmsia'];
+			}
+
 			if ( ! isset( $changes[ $fuel_key ] ) || ! is_numeric( $changes[ $fuel_key ] ) ) {
 				return esc_html( $atts['fallback'] );
 			}
@@ -226,6 +257,24 @@ class Fuel_Price_Shortcodes {
 	}
 
 	/**
+	 * Convenience Shortcode: [fuel_diesel_b7] (Euro 5 B7)
+	 */
+	public static function render_diesel_b7( $atts ) {
+		$atts         = is_array( $atts ) ? $atts : array();
+		$atts['type'] = 'diesel_b7';
+		return self::render_fuel_price( $atts );
+	}
+
+	/**
+	 * Convenience Shortcode: [fuel_diesel_b7_east] (Euro 5 B7 Sabah & Sarawak)
+	 */
+	public static function render_diesel_b7_east( $atts ) {
+		$atts         = is_array( $atts ) ? $atts : array();
+		$atts['type'] = 'diesel_b7_eastmsia';
+		return self::render_fuel_price( $atts );
+	}
+
+	/**
 	 * Convenience Shortcode: [fuel_price_date]
 	 */
 	public static function render_date( $atts ) {
@@ -246,6 +295,7 @@ class Fuel_Price_Shortcodes {
 				'title'       => __( 'Current Fuel Prices in Malaysia', 'fuel-price' ),
 				'show_date'   => 'true',
 				'show_change' => 'true',
+				'show_b7'     => 'true',
 				'theme'       => 'light', // 'light' or 'dark'
 				'class'       => '',
 			),
@@ -257,6 +307,9 @@ class Fuel_Price_Shortcodes {
 		if ( empty( $data ) ) {
 			return '<div class="fuel-price-empty">' . esc_html__( 'Fuel price data currently unavailable.', 'fuel-price' ) . '</div>';
 		}
+
+		$diesel_b7_price = isset( $data['diesel_b7'] ) ? $data['diesel_b7'] : ( isset( $data['diesel'] ) ? round( (float) $data['diesel'] + 0.20, 2 ) : null );
+		$diesel_b7_change = isset( $data['changes']['diesel_b7'] ) ? $data['changes']['diesel_b7'] : ( isset( $data['changes']['diesel'] ) ? $data['changes']['diesel'] : 0 );
 
 		$fuels = array(
 			array(
@@ -277,20 +330,32 @@ class Fuel_Price_Shortcodes {
 			),
 			array(
 				'key'       => 'diesel',
-				'title'     => 'Diesel (Peninsular)',
-				'badge'     => 'EURO 5',
+				'title'     => 'Diesel (Euro 5 B10)',
+				'badge'     => 'EURO 5 B10',
 				'badge_cls' => 'badge-diesel',
 				'price'     => isset( $data['diesel'] ) ? $data['diesel'] : null,
 				'change'    => isset( $data['changes']['diesel'] ) ? $data['changes']['diesel'] : 0,
 			),
-			array(
-				'key'       => 'diesel_eastmsia',
-				'title'     => 'Diesel (Sabah & Sarawak)',
-				'badge'     => 'EURO 5',
-				'badge_cls' => 'badge-diesel-east',
-				'price'     => isset( $data['diesel_eastmsia'] ) ? $data['diesel_eastmsia'] : null,
-				'change'    => isset( $data['changes']['diesel_eastmsia'] ) ? $data['changes']['diesel_eastmsia'] : 0,
-			),
+		);
+
+		if ( filter_var( $atts['show_b7'], FILTER_VALIDATE_BOOLEAN ) ) {
+			$fuels[] = array(
+				'key'       => 'diesel_b7',
+				'title'     => 'Diesel (Euro 5 B7)',
+				'badge'     => 'EURO 5 B7',
+				'badge_cls' => 'badge-diesel-b7',
+				'price'     => $diesel_b7_price,
+				'change'    => $diesel_b7_change,
+			);
+		}
+
+		$fuels[] = array(
+			'key'       => 'diesel_eastmsia',
+			'title'     => 'Diesel (Sabah & Sarawak)',
+			'badge'     => 'EURO 5',
+			'badge_cls' => 'badge-diesel-east',
+			'price'     => isset( $data['diesel_eastmsia'] ) ? $data['diesel_eastmsia'] : null,
+			'change'    => isset( $data['changes']['diesel_eastmsia'] ) ? $data['changes']['diesel_eastmsia'] : 0,
 		);
 
 		$theme_class = ( 'dark' === $atts['theme'] ) ? 'theme-dark' : 'theme-light';
@@ -362,7 +427,9 @@ class Fuel_Price_Shortcodes {
 			return '<div class="fuel-price-empty">' . esc_html__( 'Fuel price data currently unavailable.', 'fuel-price' ) . '</div>';
 		}
 
-		$date_display = ! empty( $data['date'] ) ? gmdate( 'd M Y', strtotime( $data['date'] ) ) : 'N/A';
+		$date_display     = ! empty( $data['date'] ) ? gmdate( 'd M Y', strtotime( $data['date'] ) ) : 'N/A';
+		$diesel_b7_price  = isset( $data['diesel_b7'] ) ? $data['diesel_b7'] : ( isset( $data['diesel'] ) ? round( (float) $data['diesel'] + 0.20, 2 ) : null );
+		$diesel_b7_change = isset( $data['changes']['diesel_b7'] ) ? $data['changes']['diesel_b7'] : ( isset( $data['changes']['diesel'] ) ? $data['changes']['diesel'] : 0 );
 
 		ob_start();
 		?>
@@ -390,9 +457,15 @@ class Fuel_Price_Shortcodes {
 						<td><?php echo esc_html( $date_display ); ?></td>
 					</tr>
 					<tr>
-						<td><strong>Diesel</strong> (Peninsular)</td>
+						<td><strong>Diesel</strong> (Euro 5 B10 - Peninsular)</td>
 						<td class="price-col">RM <?php echo esc_html( isset( $data['diesel'] ) ? number_format( $data['diesel'], 2 ) : 'N/A' ); ?></td>
 						<td><?php echo self::render_change_pill( isset( $data['changes']['diesel'] ) ? $data['changes']['diesel'] : 0 ); ?></td>
+						<td><?php echo esc_html( $date_display ); ?></td>
+					</tr>
+					<tr>
+						<td><strong>Diesel Euro 5 B7</strong> (Peninsular)</td>
+						<td class="price-col">RM <?php echo esc_html( null !== $diesel_b7_price ? number_format( $diesel_b7_price, 2 ) : 'N/A' ); ?></td>
+						<td><?php echo self::render_change_pill( $diesel_b7_change ); ?></td>
 						<td><?php echo esc_html( $date_display ); ?></td>
 					</tr>
 					<tr>
@@ -419,6 +492,8 @@ class Fuel_Price_Shortcodes {
 			return '';
 		}
 
+		$diesel_b7_price = isset( $data['diesel_b7'] ) ? $data['diesel_b7'] : ( isset( $data['diesel'] ) ? round( (float) $data['diesel'] + 0.20, 2 ) : null );
+
 		ob_start();
 		?>
 		<div class="five-fuel-ticker">
@@ -427,7 +502,9 @@ class Fuel_Price_Shortcodes {
 			<span class="ticker-sep">•</span>
 			<span class="ticker-item"><span class="ticker-fuel">RON97</span> RM <?php echo esc_html( isset( $data['ron97'] ) ? number_format( $data['ron97'], 2 ) : 'N/A' ); ?></span>
 			<span class="ticker-sep">•</span>
-			<span class="ticker-item"><span class="ticker-fuel">Diesel</span> RM <?php echo esc_html( isset( $data['diesel'] ) ? number_format( $data['diesel'], 2 ) : 'N/A' ); ?></span>
+			<span class="ticker-item"><span class="ticker-fuel">Diesel B10</span> RM <?php echo esc_html( isset( $data['diesel'] ) ? number_format( $data['diesel'], 2 ) : 'N/A' ); ?></span>
+			<span class="ticker-sep">•</span>
+			<span class="ticker-item"><span class="ticker-fuel">Diesel B7</span> RM <?php echo esc_html( null !== $diesel_b7_price ? number_format( $diesel_b7_price, 2 ) : 'N/A' ); ?></span>
 		</div>
 		<?php
 		return ob_get_clean();

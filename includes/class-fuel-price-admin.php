@@ -133,6 +133,7 @@ class Fuel_Price_Admin {
 			'frequency'   => isset( $_POST['fuel_price_frequency'] ) ? sanitize_text_field( $_POST['fuel_price_frequency'] ) : 'weekly',
 			'day_of_week' => isset( $_POST['fuel_price_day_of_week'] ) ? sanitize_text_field( $_POST['fuel_price_day_of_week'] ) : '3',
 			'time'        => isset( $_POST['fuel_price_time'] ) ? sanitize_text_field( $_POST['fuel_price_time'] ) : '17:00',
+			'b7_premium'  => isset( $_POST['fuel_price_b7_premium'] ) && is_numeric( $_POST['fuel_price_b7_premium'] ) ? floatval( $_POST['fuel_price_b7_premium'] ) : 0.20,
 		);
 
 		Fuel_Price_Cron::save_settings( $settings );
@@ -264,12 +265,27 @@ class Fuel_Price_Admin {
 
 								<!-- Diesel Peninsular -->
 								<div class="price-box diesel">
-									<div class="price-tag">Diesel (Peninsular)</div>
+									<div class="price-tag">Diesel (Euro 5 B10)</div>
 									<div class="price-value" id="val-diesel">
 										<span class="unit">RM</span> <?php echo esc_html( isset( $data['diesel'] ) ? number_format( $data['diesel'], 2 ) : 'N/A' ); ?>
 									</div>
 									<div class="price-change" id="chg-diesel">
 										<?php echo self::render_diff_badge( isset( $data['changes']['diesel'] ) ? $data['changes']['diesel'] : 0 ); ?>
+									</div>
+								</div>
+
+								<!-- Diesel Euro 5 B7 -->
+								<?php
+								$diesel_b7_val    = isset( $data['diesel_b7'] ) ? $data['diesel_b7'] : ( isset( $data['diesel'] ) ? round( (float) $data['diesel'] + 0.20, 2 ) : null );
+								$diesel_b7_change = isset( $data['changes']['diesel_b7'] ) ? $data['changes']['diesel_b7'] : ( isset( $data['changes']['diesel'] ) ? $data['changes']['diesel'] : 0 );
+								?>
+								<div class="price-box diesel-b7">
+									<div class="price-tag">Diesel Euro 5 B7</div>
+									<div class="price-value" id="val-diesel-b7">
+										<span class="unit">RM</span> <?php echo esc_html( null !== $diesel_b7_val ? number_format( $diesel_b7_val, 2 ) : 'N/A' ); ?>
+									</div>
+									<div class="price-change" id="chg-diesel-b7">
+										<?php echo self::render_diff_badge( $diesel_b7_change ); ?>
 									</div>
 								</div>
 
@@ -310,7 +326,7 @@ class Fuel_Price_Admin {
 					<!-- Card: Cron Schedule Settings Form -->
 					<div class="fuel-card">
 						<div class="fuel-card-header">
-							<h2>Automated Cronjob Schedule</h2>
+							<h2>Automated Cronjob Schedule &amp; Fuel Settings</h2>
 						</div>
 						<div class="fuel-card-body">
 							<form method="post" action="">
@@ -364,6 +380,20 @@ class Fuel_Price_Admin {
 											<p class="description">
 												Current site timezone is <strong><?php echo esc_html( $timezone_str ); ?></strong>. Current site time: <strong><?php echo esc_html( $site_time ); ?></strong>.
 												<br>New prices are typically posted between 17:00 (5:00 PM) and 18:00 (6:00 PM).
+											</p>
+										</td>
+									</tr>
+
+									<tr>
+										<th scope="row"><label for="fuel_price_b7_premium">Diesel Euro 5 B7 Premium</label></th>
+										<td>
+											<div style="display: flex; align-items: center; gap: 8px;">
+												<span>+RM</span>
+												<input type="number" step="0.01" min="0" name="fuel_price_b7_premium" id="fuel_price_b7_premium" value="<?php echo esc_attr( isset( $settings['b7_premium'] ) ? $settings['b7_premium'] : '0.20' ); ?>" style="width: 80px;" required />
+												<span>per litre</span>
+											</div>
+											<p class="description">
+												In Malaysia, Euro 5 B7 retail price is regulated at <strong>+20 sen (+RM 0.20)</strong> higher than Euro 5 B10. You can adjust this offset if regulation ever changes.
 											</p>
 										</td>
 									</tr>
@@ -438,12 +468,22 @@ class Fuel_Price_Admin {
 
 								<!-- Diesel Peninsular -->
 								<div class="shortcode-copy-item">
-									<div class="item-label">Diesel (Peninsular)</div>
+									<div class="item-label">Diesel (Euro 5 B10 - Peninsular)</div>
 									<div class="item-code">
 										<code>[fuel_price type="diesel"]</code>
 										<button type="button" class="btn-copy" data-copy='[fuel_price type="diesel"]' title="Copy Shortcode">Copy</button>
 									</div>
 									<div class="item-alias">Shorthand: <code>[fuel_diesel]</code></div>
+								</div>
+
+								<!-- Diesel Euro 5 B7 -->
+								<div class="shortcode-copy-item">
+									<div class="item-label">Diesel Euro 5 B7 (Peninsular)</div>
+									<div class="item-code">
+										<code>[fuel_price type="diesel_b7"]</code>
+										<button type="button" class="btn-copy" data-copy='[fuel_price type="diesel_b7"]' title="Copy Shortcode">Copy</button>
+									</div>
+									<div class="item-alias">Shorthand: <code>[fuel_diesel_b7]</code> (East Msia: <code>[fuel_diesel_b7_east]</code>)</div>
 								</div>
 
 								<!-- Diesel Sabah & Sarawak -->

@@ -2,8 +2,8 @@
 /**
  * Plugin Name: FIVE Fuel Price Malaysia (data.gov.my)
  * Plugin URI:  https://five.my/
- * Description: Automated weekly sync of official Malaysian fuel prices (RON95, RON97, Diesel) from data.gov.my, customizable WP-Cron schedule, manual refresh button, and flexible shortcodes for front-end text widgets and page builders.
- * Version:     1.0.0
+ * Description: Automated weekly sync of official Malaysian fuel prices (RON95, RON97, Diesel, Euro 5 B7) from data.gov.my, customizable WP-Cron schedule, manual refresh button, and flexible shortcodes for front-end text widgets and page builders.
+ * Version:     1.1.0
  * Author:      Supercraft / FIVE Petroleum Malaysia
  * Text Domain: fuel-price
  * Domain Path: /languages
@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'FUEL_PRICE_VERSION', '1.0.0' );
+define( 'FUEL_PRICE_VERSION', '1.1.0' );
 define( 'FUEL_PRICE_PLUGIN_FILE', __FILE__ );
 define( 'FUEL_PRICE_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'FUEL_PRICE_PLUGIN_URL', plugin_dir_url( __FILE__ ) );

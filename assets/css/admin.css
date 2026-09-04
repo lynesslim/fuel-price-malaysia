@@ -173,6 +173,10 @@
 	border-left: 4px solid #3b82f6;
 }
 
+.price-box.diesel-b7 {
+	border-left: 4px solid #06b6d4;
+}
+
 .price-box.diesel-east {
 	border-left: 4px solid #8b5cf6;
 }

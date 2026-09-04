@@ -104,6 +104,10 @@
 						if (d.diesel !== null && d.diesel !== undefined) {
 							$('#val-diesel').html('<span class="unit">RM</span> ' + parseFloat(d.diesel).toFixed(2));
 						}
+						var b7Val = (d.diesel_b7 !== null && d.diesel_b7 !== undefined) ? d.diesel_b7 : (d.diesel ? (parseFloat(d.diesel) + 0.20) : null);
+						if (b7Val !== null) {
+							$('#val-diesel-b7').html('<span class="unit">RM</span> ' + parseFloat(b7Val).toFixed(2));
+						}
 						if (d.diesel_eastmsia !== null && d.diesel_eastmsia !== undefined) {
 							$('#val-diesel-east').html('<span class="unit">RM</span> ' + parseFloat(d.diesel_eastmsia).toFixed(2));
 						}
@@ -113,6 +117,7 @@
 							updateDiffBadge('#chg-ron95', d.changes.ron95);
 							updateDiffBadge('#chg-ron97', d.changes.ron97);
 							updateDiffBadge('#chg-diesel', d.changes.diesel);
+							updateDiffBadge('#chg-diesel-b7', d.changes.diesel_b7 || d.changes.diesel);
 							updateDiffBadge('#chg-diesel-east', d.changes.diesel_eastmsia);
 						}
 
