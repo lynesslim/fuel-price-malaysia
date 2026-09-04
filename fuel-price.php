@@ -45,6 +45,11 @@ if ( file_exists( FUEL_PRICE_PLUGIN_DIR . 'includes/plugin-update-checker/plugin
 	// Track the main branch for updates
 	$fuel_update_checker->setBranch( 'main' );
 
+	// Prefer downloading release assets (e.g. attached zip files in GitHub releases)
+	if ( method_exists( $fuel_update_checker->getVcsApi(), 'enableReleaseAssets' ) ) {
+		$fuel_update_checker->getVcsApi()->enableReleaseAssets();
+	}
+
 	// Allow setting authentication token for private repositories via filter
 	$github_token = apply_filters( 'fuel_price_github_token', '' );
 	if ( ! empty( $github_token ) ) {
