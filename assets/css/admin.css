@@ -1,0 +1,485 @@
+/**
+ * Fuel Price Malaysia - Admin Styles
+ */
+
+.fuel-price-admin-wrap {
+	max-width: 1280px;
+	margin: 20px 20px 40px 0;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+}
+
+/* Header */
+.fuel-price-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
+	padding: 24px 30px;
+	border-radius: 12px;
+	color: #ffffff;
+	margin-bottom: 24px;
+	box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+
+.fuel-price-header .header-badge {
+	display: inline-block;
+	background: #dc2626;
+	color: #ffffff;
+	font-size: 11px;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+	padding: 4px 10px;
+	border-radius: 20px;
+	margin-bottom: 8px;
+}
+
+.fuel-price-header .header-title {
+	color: #ffffff;
+	font-size: 24px;
+	font-weight: 700;
+	margin: 0 0 6px 0;
+	line-height: 1.2;
+}
+
+.fuel-price-header .header-desc {
+	margin: 0;
+	color: #9ca3af;
+	font-size: 13.5px;
+}
+
+.fuel-price-header .header-desc a {
+	color: #fbbf24;
+	text-decoration: underline;
+}
+
+.fuel-price-header .header-actions button {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	background: #dc2626 !important;
+	border-color: #b91c1c !important;
+	font-weight: 600;
+	transition: all 0.2s ease;
+}
+
+.fuel-price-header .header-actions button:hover {
+	background: #b91c1c !important;
+	transform: translateY(-1px);
+	box-shadow: 0 4px 12px rgba(220, 38, 38, 0.35);
+}
+
+/* Main Layout Grid */
+.fuel-price-grid {
+	display: grid;
+	grid-template-columns: 1.55fr 1fr;
+	gap: 24px;
+	align-items: start;
+}
+
+@media (max-width: 980px) {
+	.fuel-price-grid {
+		grid-template-columns: 1fr;
+	}
+}
+
+/* Card Components */
+.fuel-card {
+	background: #ffffff;
+	border: 1px solid #e5e7eb;
+	border-radius: 12px;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+	margin-bottom: 24px;
+	overflow: hidden;
+}
+
+.fuel-card-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 18px 24px;
+	background: #f9fafb;
+	border-bottom: 1px solid #e5e7eb;
+}
+
+.fuel-card-header h2 {
+	margin: 0;
+	font-size: 16px;
+	font-weight: 600;
+	color: #111827;
+}
+
+.card-title-group {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	flex-wrap: wrap;
+}
+
+.pill-date {
+	background: #e0f2fe;
+	color: #0369a1;
+	padding: 3px 10px;
+	border-radius: 14px;
+	font-size: 12px;
+}
+
+.last-sync-meta {
+	font-size: 12px;
+	color: #6b7280;
+}
+
+.fuel-card-body {
+	padding: 24px;
+}
+
+/* Prices Display Grid */
+.prices-display-grid {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: 16px;
+}
+
+@media (max-width: 600px) {
+	.prices-display-grid {
+		grid-template-columns: 1fr;
+	}
+}
+
+.price-box {
+	border-radius: 10px;
+	padding: 16px 20px;
+	background: #fdfdfd;
+	border: 1px solid #e5e7eb;
+	position: relative;
+	transition: all 0.2s ease;
+}
+
+.price-box:hover {
+	border-color: #cbd5e1;
+	transform: translateY(-2px);
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+}
+
+.price-box.ron95 {
+	border-left: 4px solid #eab308;
+}
+
+.price-box.ron97 {
+	border-left: 4px solid #10b981;
+}
+
+.price-box.diesel {
+	border-left: 4px solid #3b82f6;
+}
+
+.price-box.diesel-east {
+	border-left: 4px solid #8b5cf6;
+}
+
+.price-tag {
+	font-size: 12.5px;
+	font-weight: 600;
+	text-transform: uppercase;
+	color: #4b5563;
+	margin-bottom: 6px;
+}
+
+.price-value {
+	font-size: 26px;
+	font-weight: 700;
+	color: #111827;
+	line-height: 1.1;
+	margin-bottom: 8px;
+}
+
+.price-value .unit {
+	font-size: 16px;
+	font-weight: 500;
+	color: #6b7280;
+	margin-right: 2px;
+}
+
+.diff-badge {
+	display: inline-block;
+	font-size: 11.5px;
+	font-weight: 600;
+	padding: 2px 8px;
+	border-radius: 12px;
+}
+
+.diff-up {
+	background: #fee2e2;
+	color: #dc2626;
+}
+
+.diff-down {
+	background: #dcfce7;
+	color: #15803d;
+}
+
+.diff-neutral {
+	background: #f3f4f6;
+	color: #6b7280;
+}
+
+/* Targeted Subsidies */
+.targeted-subsidies-toggle {
+	margin-top: 18px;
+	padding-top: 14px;
+	border-top: 1px dashed #e5e7eb;
+}
+
+.targeted-subsidies-toggle summary {
+	font-size: 12.5px;
+	font-weight: 600;
+	color: #4b5563;
+	cursor: pointer;
+}
+
+.targeted-subsidies-grid {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: 10px;
+	margin-top: 12px;
+	font-size: 13px;
+	color: #374151;
+}
+
+/* Settings Form */
+.fuel-settings-table th {
+	width: 170px;
+	font-weight: 600;
+	color: #1f2937;
+}
+
+.fuel-settings-table input[type="time"],
+.fuel-settings-table select {
+	min-width: 220px;
+	padding: 6px 12px;
+	border-radius: 6px;
+}
+
+.cron-status-box {
+	background: #f0fdf4;
+	border: 1px solid #bbf7d0;
+	border-radius: 8px;
+	padding: 14px 18px;
+	margin: 20px 0 10px 0;
+}
+
+.status-indicator {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.status-indicator .dashicons {
+	font-size: 24px;
+	width: 24px;
+	height: 24px;
+	color: #16a34a;
+}
+
+.status-text strong {
+	color: #166534;
+}
+
+.badge-diff {
+	color: #15803d;
+	font-weight: 600;
+	margin-left: 6px;
+}
+
+/* Shortcode Reference Sidebar */
+.side-desc {
+	margin: 0 0 16px 0;
+	font-size: 13px;
+	color: #4b5563;
+	line-height: 1.5;
+}
+
+.shortcode-copy-list {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+.shortcode-copy-item {
+	background: #f9fafb;
+	border: 1px solid #e5e7eb;
+	border-radius: 8px;
+	padding: 10px 14px;
+}
+
+.shortcode-copy-item .item-alias {
+	font-size: 11px;
+	color: #6b7280;
+	margin-top: 6px;
+}
+
+.shortcode-copy-item .item-alias code {
+	font-size: 11px;
+	padding: 1px 5px;
+	background: #f3f4f6;
+	border-color: #e5e7eb;
+}
+
+/* Callout Box */
+.instruction-callout {
+	background: #eff6ff;
+	border-left: 4px solid #3b82f6;
+	border-radius: 6px;
+	padding: 14px 18px;
+	margin-bottom: 20px;
+}
+
+.instruction-callout h4 {
+	margin: 0 0 8px 0;
+	color: #1e40af;
+	font-size: 13.5px;
+	font-weight: 700;
+}
+
+.instruction-callout ol {
+	margin: 0;
+	padding-left: 18px;
+	font-size: 12.5px;
+	color: #1e3a8a;
+	line-height: 1.6;
+}
+
+.section-subtitle {
+	font-size: 13.5px;
+	font-weight: 700;
+	color: #111827;
+	margin: 0 0 10px 0;
+	text-transform: uppercase;
+	letter-spacing: 0.03em;
+}
+
+/* Parameters Table */
+.parameters-table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 12px;
+	margin: 10px 0 20px 0;
+	background: #ffffff;
+	border: 1px solid #e5e7eb;
+	border-radius: 6px;
+	overflow: hidden;
+}
+
+.parameters-table th {
+	background: #f9fafb;
+	padding: 8px 12px;
+	text-align: left;
+	font-weight: 600;
+	color: #374151;
+	border-bottom: 1px solid #e5e7eb;
+}
+
+.parameters-table td {
+	padding: 8px 12px;
+	border-bottom: 1px solid #f3f4f6;
+	color: #4b5563;
+	vertical-align: top;
+}
+
+.parameters-table tr:last-child td {
+	border-bottom: none;
+}
+
+.parameters-table code {
+	font-size: 11.5px;
+	padding: 2px 5px;
+	background: #f3f4f6;
+	color: #0f172a;
+	border: 1px solid #e5e7eb;
+	border-radius: 3px;
+}
+
+.shortcode-copy-item .item-label {
+	font-size: 11.5px;
+	font-weight: 600;
+	color: #6b7280;
+	margin-bottom: 4px;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+}
+
+.shortcode-copy-item .item-code {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 8px;
+}
+
+.shortcode-copy-item code {
+	background: #ffffff;
+	border: 1px solid #e2e8f0;
+	padding: 4px 8px;
+	border-radius: 4px;
+	font-size: 12.5px;
+	color: #0f172a;
+	word-break: break-all;
+}
+
+.btn-copy {
+	background: #ffffff;
+	border: 1px solid #d1d5db;
+	color: #374151;
+	border-radius: 4px;
+	padding: 4px 10px;
+	font-size: 11.5px;
+	font-weight: 600;
+	cursor: pointer;
+	transition: all 0.15s ease;
+	flex-shrink: 0;
+}
+
+.btn-copy:hover {
+	background: #f3f4f6;
+	border-color: #9ca3af;
+}
+
+.btn-copy.copied {
+	background: #10b981;
+	border-color: #059669;
+	color: #ffffff;
+}
+
+.styling-tips-box {
+	margin-top: 20px;
+	background: #fffbeb;
+	border: 1px solid #fde68a;
+	border-radius: 8px;
+	padding: 14px 16px;
+}
+
+.styling-tips-box h3 {
+	margin: 0 0 8px 0;
+	font-size: 13.5px;
+	font-weight: 700;
+	color: #92400e;
+}
+
+.styling-tips-box pre {
+	background: #ffffff;
+	border: 1px solid #fef3c7;
+	border-radius: 4px;
+	padding: 10px;
+	font-size: 11.5px;
+	overflow-x: auto;
+	margin: 8px 0;
+}
+
+/* Dashicon spin animation */
+.dashicons.spin {
+	animation: fuel-spin 1.2s infinite linear;
+}
+
+@keyframes fuel-spin {
+	0% { transform: rotate(0deg); }
+	100% { transform: rotate(360deg); }
+}

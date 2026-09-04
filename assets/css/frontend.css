@@ -1,0 +1,300 @@
+/**
+ * Fuel Price Malaysia - Frontend Styles
+ */
+
+/* Single Shortcode Span styling */
+.five-fuel-price {
+	font-weight: inherit;
+	color: inherit;
+	display: inline-block;
+}
+
+.five-fuel-price.fuel-change.change-up {
+	color: #dc2626;
+}
+
+.five-fuel-price.fuel-change.change-down {
+	color: #16a34a;
+}
+
+.five-fuel-price.fuel-change.change-neutral {
+	color: #6b7280;
+}
+
+/* ==========================================================================
+   Cards Component: [fuel_price_cards]
+   ========================================================================== */
+
+.five-fuel-cards-container {
+	margin: 24px 0;
+	font-family: inherit;
+	box-sizing: border-box;
+}
+
+.five-fuel-cards-container * {
+	box-sizing: border-box;
+}
+
+.five-fuel-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 18px;
+	flex-wrap: wrap;
+	gap: 12px;
+}
+
+.five-fuel-title {
+	margin: 0;
+	font-size: 20px;
+	font-weight: 700;
+	color: #111827;
+}
+
+.five-fuel-date-badge {
+	font-size: 13px;
+	color: #4b5563;
+	background: #f3f4f6;
+	padding: 5px 12px;
+	border-radius: 20px;
+	font-weight: 500;
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+}
+
+.five-fuel-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+	gap: 18px;
+}
+
+.five-fuel-card {
+	background: #ffffff;
+	border: 1px solid #e5e7eb;
+	border-radius: 12px;
+	padding: 20px 22px;
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+	transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+	position: relative;
+	overflow: hidden;
+}
+
+.five-fuel-card:hover {
+	transform: translateY(-3px);
+	box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+	border-color: #d1d5db;
+}
+
+/* Top Badge & Fuel Name */
+.five-fuel-card .card-top {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 14px;
+}
+
+.card-fuel-badge {
+	font-size: 11px;
+	font-weight: 700;
+	padding: 3px 8px;
+	border-radius: 6px;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+}
+
+.badge-ron95 {
+	background: #fef3c7;
+	color: #b45309;
+}
+
+.badge-ron97 {
+	background: #d1fae5;
+	color: #065f46;
+}
+
+.badge-diesel {
+	background: #dbeafe;
+	color: #1e40af;
+}
+
+.badge-diesel-east {
+	background: #ede9fe;
+	color: #5b21b6;
+}
+
+.card-fuel-name {
+	font-size: 12px;
+	font-weight: 600;
+	color: #6b7280;
+}
+
+/* Price Numbers */
+.five-fuel-card .card-middle {
+	display: flex;
+	align-items: baseline;
+	margin-bottom: 12px;
+}
+
+.five-fuel-card .currency {
+	font-size: 18px;
+	font-weight: 600;
+	color: #4b5563;
+	margin-right: 4px;
+}
+
+.five-fuel-card .amount {
+	font-size: 32px;
+	font-weight: 800;
+	color: #111827;
+	line-height: 1;
+	letter-spacing: -0.02em;
+}
+
+.five-fuel-card .unit {
+	font-size: 13px;
+	font-weight: 500;
+	color: #9ca3af;
+	margin-left: 6px;
+}
+
+/* Change Indicator */
+.five-fuel-card .card-bottom {
+	display: flex;
+	align-items: center;
+	padding-top: 10px;
+	border-top: 1px solid #f3f4f6;
+}
+
+.change-tag {
+	font-size: 12px;
+	font-weight: 600;
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	padding: 2px 8px;
+	border-radius: 12px;
+}
+
+.change-up {
+	background: #fee2e2;
+	color: #b91c1c;
+}
+
+.change-down {
+	background: #dcfce7;
+	color: #15803d;
+}
+
+.change-neutral {
+	background: #f3f4f6;
+	color: #6b7280;
+}
+
+/* Dark Theme */
+.five-fuel-cards-container.theme-dark .five-fuel-title {
+	color: #f9fafb;
+}
+
+.five-fuel-cards-container.theme-dark .five-fuel-date-badge {
+	background: #374151;
+	color: #d1d5db;
+}
+
+.five-fuel-cards-container.theme-dark .five-fuel-card {
+	background: #1f2937;
+	border-color: #374151;
+}
+
+.five-fuel-cards-container.theme-dark .card-fuel-name {
+	color: #9ca3af;
+}
+
+.five-fuel-cards-container.theme-dark .amount {
+	color: #ffffff;
+}
+
+.five-fuel-cards-container.theme-dark .currency {
+	color: #9ca3af;
+}
+
+.five-fuel-cards-container.theme-dark .card-bottom {
+	border-top-color: #374151;
+}
+
+/* ==========================================================================
+   Table Component: [fuel_price_table]
+   ========================================================================== */
+
+.five-fuel-table-wrapper {
+	overflow-x: auto;
+	margin: 20px 0;
+}
+
+.five-fuel-table {
+	width: 100%;
+	border-collapse: collapse;
+	background: #ffffff;
+	border: 1px solid #e5e7eb;
+	border-radius: 10px;
+	overflow: hidden;
+}
+
+.five-fuel-table th {
+	background: #f9fafb;
+	color: #374151;
+	font-size: 13px;
+	font-weight: 600;
+	text-align: left;
+	padding: 12px 16px;
+	border-bottom: 1px solid #e5e7eb;
+}
+
+.five-fuel-table td {
+	padding: 14px 16px;
+	border-bottom: 1px solid #f3f4f6;
+	font-size: 14px;
+	color: #1f2937;
+}
+
+.five-fuel-table tbody tr:last-child td {
+	border-bottom: none;
+}
+
+.five-fuel-table .price-col {
+	font-weight: 700;
+	font-size: 15px;
+	color: #111827;
+}
+
+/* ==========================================================================
+   Ticker Component: [fuel_price_ticker]
+   ========================================================================== */
+
+.five-fuel-ticker {
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+	background: #f9fafb;
+	border: 1px solid #e5e7eb;
+	padding: 6px 14px;
+	border-radius: 20px;
+	font-size: 13px;
+	color: #374151;
+	flex-wrap: wrap;
+}
+
+.ticker-label {
+	font-weight: 700;
+	color: #111827;
+}
+
+.ticker-fuel {
+	font-weight: 600;
+	color: #4b5563;
+	margin-right: 4px;
+}
+
+.ticker-sep {
+	color: #cbd5e1;
+}
